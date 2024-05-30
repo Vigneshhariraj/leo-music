@@ -1,7 +1,7 @@
 # leotech
 
 A new Flutter project.
-
+It is a Music streaming app create using flutter
 ## Getting Started
 
 This project is a starting point for a Flutter application.
