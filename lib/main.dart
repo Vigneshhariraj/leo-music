@@ -159,27 +159,77 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class PlaylistScreen extends StatelessWidget {
-  final List<String> playlists = [
-    'Top Hits',
-    'Discover Weekly',
-    'Release Radar',
-    'Chill Vibes',
-    'Workout',
+  final List<String> albums = [
+    'Album 1',
+    'Album 2',
+    'Album 3',
+    'Album 4',
+    'Album 5',
   ];
+
+  final Map<String, List<String>> albumSongs = {
+    'Album 1': ['Song A1', 'Song A2', 'Song A3'],
+    'Album 2': ['Song B1', 'Song B2', 'Song B3'],
+    'Album 3': ['Song C1', 'Song C2', 'Song C3'],
+    'Album 4': ['Song D1', 'Song D2', 'Song D3'],
+    'Album 5': ['Song E1', 'Song E2', 'Song E3'],
+  };
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: playlists.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: Icon(Icons.music_note),
-          title: Text(playlists[index]),
-          onTap: () {
-            // Navigate to playlist details
-          },
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, // Three columns to make album tiles smaller
+          crossAxisSpacing: 4.0,
+          mainAxisSpacing: 4.0,
+        ),
+        itemCount: albums.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AlbumDetailScreen(
+                    albumName: albums[index],
+                    songs: albumSongs[albums[index]] ?? [],
+                  ),
+                ),
+              );
+            },
+            child: GridTile(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 4.0,
+                      spreadRadius: 1.0,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    albums[index],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 12.0, // Smaller font size
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -318,6 +368,31 @@ class LibraryScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class AlbumDetailScreen extends StatelessWidget {
+  final String albumName;
+  final List<String> songs;
+
+  AlbumDetailScreen({required this.albumName, required this.songs});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(albumName),
+      ),
+      body: ListView.builder(
+        itemCount: songs.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Icon(Icons.music_note),
+            title: Text(songs[index]),
+          );
+        },
+      ),
     );
   }
 }
